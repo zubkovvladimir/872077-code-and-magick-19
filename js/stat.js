@@ -20,10 +20,6 @@ var renderCloud = function (ctx, x, y, color) {
 var getMaxElemet = function (arr) {
   var maxElement = arr[0];
 
-  if (arr.length === 0) {
-    return 0;
-  }
-
   for (var i = 0; i < arr.length; i++) {
     if (arr[i] > maxElement) {
       maxElement = arr[i];
@@ -33,7 +29,7 @@ var getMaxElemet = function (arr) {
   return maxElement;
 };
 
-var getColorElement = function (element) {
+var getColor = function (element) {
   if (element === 'Вы') {
     return 'rgba(255, 0, 0, 1)';
   } else {
@@ -41,7 +37,7 @@ var getColorElement = function (element) {
   }
 };
 
-var barHeight = function (gistogramHeight, arr, index) {
+var getbarHeight = function (gistogramHeight, arr, index) {
   return (gistogramHeight * Math.round(arr[index])) / Math.round(getMaxElemet(arr));
 };
 
@@ -55,10 +51,11 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillText('Список результатов:', HEADER_X, GAP + FONT_GAP + (GAP * 2));
 
   for (var i = 0; i < names.length; i++) {
+    var gistogramX = HEADER_X + ((BAR_WIDTH + BAR_GAP) * i);
     ctx.fillStyle = '#000';
-    ctx.fillText(names[i], HEADER_X + ((BAR_WIDTH + BAR_GAP) * i), CLOUD_HEIGHT - FONT_GAP);
-    ctx.fillText(Math.round(times[i]), HEADER_X + ((BAR_WIDTH + BAR_GAP) * i), (-barHeight(GISTOGRAM_HEIGHT, times, i) + CLOUD_HEIGHT - (GAP * 2) - (FONT_GAP * 2)));
-    ctx.fillStyle = getColorElement(names[i]);
-    ctx.fillRect(HEADER_X + ((BAR_WIDTH + BAR_GAP) * i), CLOUD_HEIGHT - GAP - FONT_GAP, BAR_WIDTH, (-barHeight(GISTOGRAM_HEIGHT, times, i)));
+    ctx.fillText(names[i], gistogramX, CLOUD_HEIGHT - FONT_GAP);
+    ctx.fillText(Math.round(times[i]), gistogramX, (-getbarHeight(GISTOGRAM_HEIGHT, times, i) + CLOUD_HEIGHT - (GAP * 2) - (FONT_GAP * 2)));
+    ctx.fillStyle = getColor(names[i]);
+    ctx.fillRect(gistogramX, CLOUD_HEIGHT - GAP - FONT_GAP, BAR_WIDTH, (-getbarHeight(GISTOGRAM_HEIGHT, times, i)));
   }
 };
