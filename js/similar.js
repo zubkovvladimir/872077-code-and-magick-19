@@ -18,35 +18,25 @@
     return rank;
   };
 
-  var namesComparator = function (left, right) {
-    if (left > right) {
-      return 1;
-    } else if (left < right) {
-      return -1;
-    } else {
-      return 0;
-    }
-  };
-
   var updateWizards = function () {
-    window.render.wizard(wizards.sort(function (left, right) {
+    window.render.wizard(wizards.slice().sort(function (left, right) {
       var rankDiff = getRank(right) - getRank(left);
       if (rankDiff === 0) {
-        rankDiff = namesComparator(left.name, right.name);
+        rankDiff = wizards.indexOf(left) - wizards.indexOf(right);
       }
       return rankDiff;
     }));
   };
 
-  window.wizard.coatChangeHandler = function (color) {
+  window.wizard.coatChangeHandler = window.debounce(function (color) {
     coatColor = color;
     updateWizards();
-  };
+  });
 
-  window.wizard.eyesChangeHandler = function (color) {
+  window.wizard.eyesChangeHandler = window.debounce(function (color) {
     eyesColor = color;
     updateWizards();
-  };
+  });
 
   var successHandler = function (data) {
     wizards = data;
@@ -66,8 +56,4 @@
   };
 
   window.backend.load(successHandler, errorHandler);
-
-  window.similar = {
-    updateWizards: updateWizards
-  };
 })();

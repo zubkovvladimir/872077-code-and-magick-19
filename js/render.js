@@ -15,7 +15,7 @@
     wizardElement.querySelector('.wizard-coat')
       .style.fill = wizard.colorCoat;
     wizardElement.querySelector('.wizard-eyes')
-      .style.fill = wizard.eyesColor;
+      .style.fill = wizard.colorEyes;
 
     return wizardElement;
   };
